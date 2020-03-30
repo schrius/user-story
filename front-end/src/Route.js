@@ -26,23 +26,35 @@ const mapStateToProps = state => ({ ...state })
 const Routes = (props) => {
     const classes = useStyles();
     const { login } = props
-    if (login.isLoading) {
+    if (login.loading) {
         return (
-            <Backdrop className={classes.backdrop} open={props.isLoading}>
+            <Backdrop className={classes.backdrop} open={login.loading}>
                 <CircularProgress color="inherit" />
             </Backdrop>
         )
-    } else if (localStorage.getItem('user')) {
-        return (
-            <Switch>
-                <Route exact path="/login" render={() => <Redirect to="/story-list" />} />
-                <RouteWithLayout component={CreateStoryView} exact layout={Layout} path="/create-story" />
-                <RouteWithLayout layout={Layout} exact path="/story-list" component={StoryListView} />
-                <RouteWithLayout layout={Layout} exact path="/story-approval" component={StoryApprovalView} />
-                <Route path="/404" component={NotFoundView} />
-                <Route path="*" render={() => <Redirect to="/404" />} />
-            </Switch>
-        )
+    } else if (login.user || localStorage.getItem('user')) {
+        user = login.user || JSON.parse(localStorage.getItem('user'))
+        if(user.userRoles.includes('Admin')){
+            return (
+                <Switch>
+                    <Route exact path="/login" render={() => <Redirect to="/story-approval" />} />
+                    <RouteWithLayout layout={Layout} exact path="/story-approval" component={StoryApprovalView} />
+                    <Route path="/404" component={NotFoundView} />
+                    <Route path="*" render={() => <Redirect to="/404" />} />
+                </Switch>
+            )
+        } else {
+            return (
+                
+                <Switch>
+                    <Route exact path="/login" render={() => <Redirect to="/story-list" />} />
+                    <RouteWithLayout component={CreateStoryView} exact layout={Layout} path="/create-story" />
+                    <RouteWithLayout layout={Layout} exact path="/story-list" component={StoryListView} />
+                    <Route path="/404" component={NotFoundView} />
+                    <Route path="*" render={() => <Redirect to="/404" />} />
+                </Switch>
+            )
+        }
     } else return (
         <Switch>
             <Route exact path="/login" component={LoginInView} />

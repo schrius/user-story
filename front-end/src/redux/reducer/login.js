@@ -1,33 +1,33 @@
 import {
     LOGIN,
-    SET_LOADING,
+    SET_LOADING_USER,
     LOGIN_ERROR,
     LOGOUT,
     ADMIN_LOGIN,
-  } from '../constants/actionTypes';
-import {history} from '../store';
+  } from '../../constants/actionTypes';
+import {history} from '../../store';
 
 export default (state = {
     user: JSON.parse(localStorage.getItem("user")) || {},
-    isLoading: false,
+    loading: false,
     error: null
 }, action) => {
     switch (action.type) {
         case LOGIN:{
             history.push('/story-list')
-            return { ...state, isLoading: false, user: action.payload };
+            return { ...state, loading: false, user: action.payload };
         }
         case ADMIN_LOGIN:{
             history.push('/story-approval')
-            return { ...state, isLoading: false, user: action.payload };
+            return { ...state, loading: false, user: action.payload };
         }
         case LOGIN_ERROR:
-            return { ...state, isLoading: false, error: action.payload };
-        case SET_LOADING:
-            return { ...state, isLoading: true };
+            return { ...state, loading: false, error: action.payload };
+        case SET_LOADING_USER:
+            return { ...state, loading: true };
         case LOGOUT:
             history.push('/login')
-            return { ...state, isLoading: false, user: {} };
+            return { ...state, loading: false, user: {} };
         default:
             return state;
     }

@@ -2,18 +2,10 @@ import React from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { connect } from 'react-redux';
-import Api from '../../api';
 import './Login.css';
-import { LOGIN } from '../../constants/actionTypes';
+import { LoginRedux } from '../../redux/actions'
 
-
-const mapStateToProps = state => ({ ...state.login })
-
-const mapDispatchToProps = dispatch => ({
-    onLogin: (email, password, admin) =>
-        dispatch({ type: LOGIN, payload: Api.Auth.login(email, password, admin)})
-})
-
+const { mapStateToProps, mapDispatchToProps} = LoginRedux
 class Login extends React.Component {
     constructor(props) {
         super(props);

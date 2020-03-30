@@ -37,7 +37,7 @@ function StoryDialog(props) {
                             id="story-dialog-time"
                             label="Estimate Time"
                             size='small'
-                            defaultValue={props.data.time}
+                            defaultValue={props.data.estimatedHrs}
                             InputProps={{
                                 readOnly: true,
                             }}
@@ -74,10 +74,10 @@ function StoryDialog(props) {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.handleDialog} color="default" >
-                    Cancel
+                <Button onClick={props.handleReject} variant="contained" color="secondary" >
+                    Reject
                     </Button>
-                <Button onClick={props.handlAccept} color="primary" autoFocus>
+                <Button onClick={props.handleAccept} variant="contained" color="primary" autoFocus>
                     Accept
                     </Button>
             </DialogActions>

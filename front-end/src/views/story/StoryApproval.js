@@ -2,40 +2,64 @@ import React from 'react';
 import MaterialTable from 'material-table';
 import StoryDialog from '../../components/StoryDialog';
 import { connect } from 'react-redux';
+import { StoryListRedux } from '../../redux/actions';
 
+const { mapStateToProps, mapDispatchToProps } = StoryListRedux
 class StoryApproval extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             openDialog: false
         }
-        this.handleDialog = this.handleDialog.bind(this)
+        this.handleDialog = this.handleDialog.bind(this);
+        this.handleAccept = this.handleAccept.bind(this);
+        this.handleReject = this.handleReject.bind(this);
     }
-    handleDialog() {
+    componentDidMount() {
+        if (!this.props.story || this.props.story.storyList.length === 0){
+            this.props.getStory(this.props.login.user)
+        }
+    }
+
+    componentWillUnmount() {
+        this.props.unloadStory()
+    }
+
+    handleDialog(rowData) {
+        this.setState({
+            openDialog: !this.state.openDialog,
+            target: rowData
+        })
+    }
+    handleAccept() {
+        this.props.acceptStory(this.state.target)
         this.setState({
             openDialog: !this.state.openDialog
         })
     }
-    handlAccept() {
+    handleReject() {
+        this.props.rejectStory(this.state.target)
         this.setState({
             openDialog: !this.state.openDialog
         })
     }
+
     render() {
         const {history} = this.props;
         return (
             <div className="container">
                 <MaterialTable
                     title="Story List"
+                    isLoading={this.props.story.loading}
                     columns={[
                         { title: 'Summary', field: 'summary' },
                         { title: 'Type', field: 'type' },
                         { title: 'Complexity', field: 'complexity' },
-                        { title: 'Estimate Time', field: 'time' },
+                        { title: 'Estimate Time', field: 'estimatedHrs' },
                         { title: 'Cost', field: 'cost', type: 'numeric' },
                         { title: 'Status', field: 'status', type: 'numeric' },
                     ]}
-                    data={stories}
+                    data={this.props.story.storyList || []}
                     detailPanel={
                         rowData => {
                             return (
@@ -72,15 +96,16 @@ class StoryApproval extends React.Component {
 
                     ]}
                     onRowClick={(event, rowData) => {
-                        this.handleDialog()
+                        this.handleDialog(rowData)
                     }}
                 />
                 {this.state.openDialog ? 
                     <StoryDialog 
                         open={this.state.openDialog} 
-                        data={stories[0]} 
-                        handleDialog={this.handleDialog}   
-                        handlAccept={this.handlAccept} 
+                        data={this.state.target || {}} 
+                        handleDialog={this.handleDialog}
+                        handleReject={this.handleReject}   
+                        handleAccept={this.handleAccept} 
                     /> : null }
             </div>
 
@@ -89,34 +114,4 @@ class StoryApproval extends React.Component {
 
 }
 
-const stories = [
-    {
-        summary: "test",
-        type: "test",
-        complexity: "test",
-        time: "test",
-        cost: "12312",
-        description: "test",
-        status: "pending"
-    },
-    {
-        summary: "test",
-        type: "test",
-        complexity: "test",
-        time: "test",
-        cost: "12313",
-        description: "test",
-        status: "rejected"
-    },
-    {
-        summary: "test",
-        type: "test",
-        complexity: "test",
-        time: "test",
-        cost: "12313",
-        description: "test",
-        status: "accepted"
-    }
-]
-
-export default StoryApproval;
+export default connect(mapStateToProps, mapDispatchToProps)(StoryApproval);

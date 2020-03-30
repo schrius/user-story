@@ -1,12 +1,10 @@
 import React from 'react';
 import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutlined';
 import './CreateStory.css'
-import { CREATE_STORY} from '../../constants/actionTypes';
 import { connect } from 'react-redux';
+import { CreateStoryRedux } from '../../redux/actions';
 
-const mapDispatchToProps = dispatch => ({
-    onCreateStory: (story) => dispatch({type: CREATE_STORY, payload: story})
-})
+const { mapStateToProps, mapDispatchToProps} = CreateStoryRedux;
 
 class CreateStory extends React.Component {
     constructor(props) {
@@ -22,6 +20,15 @@ class CreateStory extends React.Component {
 
     handleCreateStory = event => {
         event.preventDefault();
+        this.props.onCreateStory({
+            createBy: this.props.user.id,
+            summary: this.state.summary,
+            type: this.state.type || 'enhancement',
+            complexity: this.state.complexity || 'Low',
+            estimatedHrs: this.state.estimatedHrs,
+            cost: this.state.cost,
+            description: this.state.description
+        })
         this.props.history.push('/story-list')
     }
     render() {
@@ -34,34 +41,34 @@ class CreateStory extends React.Component {
                             <div className="col-12">
                                 <div className="form-group">
                                     <label className="control-label" htmlFor="summary">Summary:</label>
-                                    <input type="text" className="form-control" id="summary" placeholder="summary" name="summary" onChange={this.handleChange}/>
+                                    <input type="text" className="form-control" id="summary" placeholder="summary" name="summary" onChange={this.handleChange} required/>
                                 </div>
                                 </div>
                             <div className="col-md-6 col-sm-12">
                                 <div className="form-group">
                                     <label className="control-label" htmlFor="type">Type:</label>
-                                    <select className="form-control" id="type" name="type" onChange={this.handleChange}>
-                                        <option>enhancement</option>
-                                        <option>bugfix</option>
-                                        <option>development</option>
-                                        <option>QA</option>
+                                    <select className="form-control" id="type" name="type" defaultValue="enhancement" onChange={this.handleChange}>
+                                        <option value="enhancement" >enhancement</option>
+                                        <option value="bugfix">bugfix</option>
+                                        <option value="development">development</option>
+                                        <option value="QA">QA</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="col-md-6 col-sm-12">
                                 <div className="form-group">
                                     <label className="control-label" htmlFor="complexity">Complexity:</label>
-                                    <select className="form-control" id="complexity" name="complexity" onChange={this.handleChange}>
-                                        <option>Low</option>
-                                        <option>Mid</option>
-                                        <option>High</option>
+                                    <select className="form-control" id="complexity" name="complexity" defaultValue="Low" onChange={this.handleChange}>
+                                        <option value="Low" >Low</option>
+                                        <option value="Mid">Mid</option>
+                                        <option value="High">High</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="col-md-6 col-sm-12">
                                 <div className="form-group">
-                                    <label className="control-label" htmlFor="time">Estimated time:</label>
-                                    <input type="text" className="form-control" id="time" placeholder="Estimated time" name="time" onChange={this.handleChange}/>
+                                    <label className="control-label" htmlFor="estimatetime">Estimated time:</label>
+                                    <input type="text" className="form-control" id="estimatetime" placeholder="Estimated hours" name="estimatedHrs" onChange={this.handleChange} required/>
                                 </div>
                             </div>
                             <div className="col-md-6 col-sm-12">
@@ -71,14 +78,14 @@ class CreateStory extends React.Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">$</span>
                                     </div>
-                                    <input type="number" className="form-control" id="cost" placeholder="Cost" name="cost" onChange={this.handleChange}/>
+                                    <input type="number" className="form-control" id="cost" placeholder="Cost" name="cost" onChange={this.handleChange} required/>
                                 </div>
                                 </div>
                             </div>
                             <div className="col-12">
                                 <div className="form-group">
                                     <label className="control-label" htmlFor="description">Description:</label>
-                                    <textarea className="form-control" id="description" rows="5" placeholder="description..." name="description" onChange={this.handleChange}></textarea>
+                                    <textarea className="form-control" id="description" rows="5" placeholder="description..." name="description" onChange={this.handleChange} required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -90,4 +97,4 @@ class CreateStory extends React.Component {
     }
 }
 
-export default connect(null, mapDispatchToProps)(CreateStory);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateStory);
