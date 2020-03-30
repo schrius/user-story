@@ -1,0 +1,9 @@
+.signin {
+    max-width: 400px;
+    margin: auto;
+    background: #ffffff;
+    box-shadow: 1px 14px 40px rgba(105, 107, 136, 0.2);
+    padding: 15px 25px 15px 25px;
+    border-radius: 15px;
+    transition: all .3s;
+}

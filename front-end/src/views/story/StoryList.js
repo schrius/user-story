@@ -1,8 +1,8 @@
 import React from 'react';
 import MaterialTable from 'material-table';
-import './StoryList.css'
 
 function StoryList(props) {
+    const { history } = props
     return (
         <div className="container">
             <MaterialTable
@@ -26,6 +26,17 @@ function StoryList(props) {
                             </div>
                         )
                     }}
+                actions={[
+                    {
+                        icon: 'add',
+                        tooltip: 'Add Story',
+                        isFreeAction: true,
+                        onClick: (event) => {
+                            event.preventDefault();
+                            history.push('create-story')
+                        }
+                    }
+                ]}
             />
         </div>
 
