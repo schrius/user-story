@@ -1,6 +1,7 @@
-import {Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany} from "typeorm";
 import { Length, IsNotEmpty } from "class-validator";
 import * as bcrypt from "bcryptjs";
+import { Story } from './Story';
 
 @Entity()
 @Unique(["username"])
@@ -28,6 +29,9 @@ export class User {
     @IsNotEmpty()
     role: string;
 
+    @OneToMany(type => Story, story => story.user)
+    stories: Story[];
+
     @Column()
     @CreateDateColumn()
     createdAt: Date;
@@ -40,7 +44,7 @@ export class User {
         this.password = bcrypt.hashSync(this.password, 8);
     }
 
-    checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
+    validatePassword(unencryptedPassword: string) {
         return bcrypt.compareSync(unencryptedPassword, this.password);
     }
 }

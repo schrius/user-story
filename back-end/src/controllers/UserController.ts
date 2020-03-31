@@ -17,13 +17,14 @@ static listAll = async (req: Request, res: Response) => {
 };
 
 static getOneById = async (req: Request, res: Response) => {
-  const id: string = req.params.id;
+  const id: number = <unknown>req.params.id as number;
 
   const userRepository = getRepository(User);
   try {
     const user = await userRepository.findOneOrFail(id, {
       select: ["id", "username", "role"] 
     });
+    //res.send(user)
   } catch (error) {
     res.status(404).send("User not found");
   }

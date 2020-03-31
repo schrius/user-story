@@ -1,8 +1,9 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
 import { Length, IsNotEmpty } from "class-validator";
+import { User } from "./User";
 
 @Entity()
-export class User {
+export class Story {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -29,6 +30,9 @@ export class User {
 
     @Column({length: 32})
     status: string;
+
+    @ManyToOne(type => User, user => user.stories)
+    user:  User;
 
     @Column()
     @CreateDateColumn()

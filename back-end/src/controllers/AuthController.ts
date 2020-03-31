@@ -8,7 +8,6 @@ import config from "../config/config";
 
 class AuthController {
   static login = async (req: Request, res: Response) => {
-
     let { username, password } = req.body;
     if (!(username && password)) {
       res.status(400).send();
@@ -22,7 +21,7 @@ class AuthController {
       res.status(401).send();
     }
 
-    if (!user.checkIfUnencryptedPasswordIsValid(password)) {
+    if (!user.validatePassword(password)) {
       res.status(401).send();
       return;
     }
@@ -53,7 +52,7 @@ class AuthController {
       res.status(401).send();
     }
 
-    if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {
+    if (!user.validatePassword(oldPassword)) {
       res.status(401).send();
       return;
     }
