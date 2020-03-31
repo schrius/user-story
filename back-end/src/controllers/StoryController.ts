@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { getRepository, getManager } from "typeorm";
 import { validate } from "class-validator";
 import { Story } from '../entity/Story'
+import { User } from '../entity/User';
 
 class StoryController{
     static listAll = async (req: Request, res: Response) => {
@@ -11,13 +12,14 @@ class StoryController{
     }
 
     static getByUserId = async (req: Request, res: Response ) => {
-        const id: number = <unknown>req.params.id as number;
+        const id = res.locals.jwtPayload.userId;
         const storyRepository = getRepository(Story);
         try {
             const story = await storyRepository
                     .createQueryBuilder()
-                    .where("story.userId = :id", {id: id})
+                    .where("story.createdBy = :id", {id: id})
                     .getMany()
+            res.send(story);
         } catch (error) {
             res.status(404).send("Story not found");
         }
@@ -25,24 +27,34 @@ class StoryController{
 
     static newStory = async (req: Request, res: Response) => {
         let { summary, type, complexity, cost, estimateHrs, description} = req.body;
-        const storyRepository = getRepository(Story);
-        const story = storyRepository.create({
-            summary: summary,
-            type: type,
-            complexity: complexity,
-            cost: cost,
-            estimateHrs: estimateHrs,
-            description: description
-        })
-        const errors = await validate(story);
-        if (errors.length > 0) {
-            res.status(400).send(errors);
-            return;
-        }
+        const id = res.locals.jwtPayload.userId;
+        const manager = getManager();
         try {
-            await storyRepository.insert(story);
-        } catch (e) {
-            res.status(409).send("story already exist")
+            const user = await manager.findOneOrFail(User, id)
+            const story = manager.create(Story, {
+                summary: summary,
+                type: type,
+                complexity: complexity,
+                cost: cost,
+                estimateHrs: estimateHrs,
+                description: description,
+                status: null,
+                user: user
+            })
+
+            const errors = await validate(story);
+            if (errors.length > 0) {
+                res.status(400).send(errors);
+                return;
+            }
+            try {
+                await manager.insert(Story,story);
+            } catch (e) {
+                res.status(409).send("story already exist")
+                return;
+            }
+        }   catch (e) {
+            res.status(404).send("invalid user")
             return;
         }
         res.status(201).send("Story created");

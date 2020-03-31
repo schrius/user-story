@@ -16,8 +16,8 @@ createConnection()
 
         app.use("/", routes)
 
-        app.listen(3000, () => {
-            console.log("User Story Server started on port 3000")
+        app.listen(3001, () => {
+            console.log("User Story Server started on port 3001")
         })
     })
     .catch(error => console.log(error));

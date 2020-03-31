@@ -8,31 +8,42 @@ import config from "../config/config";
 
 class AuthController {
   static login = async (req: Request, res: Response) => {
-    let { username, password } = req.body;
-    if (!(username && password)) {
-      res.status(400).send();
+    let basicAuth = req.headers['authorization'];
+
+    if(basicAuth){
+        let encodedAuth = basicAuth.split(' ');
+        if(encodedAuth.length === 2 && /^Basic$/i.test(encodedAuth[0])){
+            let buf = Buffer.from(encodedAuth[1], 'base64').toString('ascii');
+            let creds = buf.toString().split(':');
+    
+            let username = creds[0];
+            let password = creds[1];
+    
+            const userRepository = getRepository(User);
+            let user: User;
+    
+            try {
+              user = await userRepository.findOneOrFail({ where: { username } });
+            } catch (error) {
+              res.status(401).send();
+            }
+        
+            if (!user.validatePassword(password)) {
+              res.status(401).send();
+              return;
+            }
+        
+            const token = jwt.sign(
+              { userId: user.id, username: user.username, roles: user.roles},
+              config.jwtSecret,
+              { expiresIn: "3h" }
+            );
+            res.send(token);
+            return;
+        }    
     }
-
-    const userRepository = getRepository(User);
-    let user: User;
-    try {
-      user = await userRepository.findOneOrFail({ where: { username } });
-    } catch (error) {
-      res.status(401).send();
-    }
-
-    if (!user.validatePassword(password)) {
-      res.status(401).send();
-      return;
-    }
-
-    const token = jwt.sign(
-      { userId: user.id, username: user.username },
-      config.jwtSecret,
-      { expiresIn: "1h" }
-    );
-
-    res.send(token);
+    res.setHeader('WWW-Authenticate', 'Basic realm="Secure Area');
+    res.status(401).send();
   };
 
   static changePassword = async (req: Request, res: Response) => {

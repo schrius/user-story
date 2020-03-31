@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn} from "typeorm";
 import { Length, IsNotEmpty } from "class-validator";
 import { User } from "./User";
 
@@ -19,8 +19,8 @@ export class Story {
     @Column({length: 32})
     complexity: string;
 
-    @Column({length: 32})
-    estimateHrs: string;
+    @Column()
+    estimateHrs: number;
 
     @Column("double")
     cost: number;
@@ -28,10 +28,11 @@ export class Story {
     @Column("text")
     description: string;
 
-    @Column({length: 32})
+    @Column({length: 32, nullable: true})
     status: string;
-
+    
     @ManyToOne(type => User, user => user.stories)
+    @JoinColumn({ name: "createdBy" })
     user:  User;
 
     @Column()
