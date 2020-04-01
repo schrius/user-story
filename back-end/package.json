@@ -3,9 +3,13 @@
    "version": "0.0.1",
    "description": "Awesome project developed with TypeORM.",
    "devDependencies": {
-      "ts-node": "3.3.0",
+      "@types/jest": "^25.1.4",
       "@types/node": "^8.0.29",
-      "typescript": "3.3.3333"
+      "jest": "^25.2.4",
+      "supertest": "^4.0.2",
+      "ts-jest": "^25.3.0",
+      "ts-node": "3.3.0",
+      "typescript": "^3.3.3333"
    },
    "dependencies": {
       "@types/bcryptjs": "^2.4.2",
@@ -28,7 +32,12 @@
    "scripts": {
       "tsc": "tsc",
       "start": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/index.ts",
+      "test": "jest",
       "prod": "tsc && node ./build/app.js",
-      "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
-    }
+      "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
+      "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate",
+      "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",
+      "migration:reset": "ts-node ./node_modules/typeorm/cli.js ",
+      "coverage": "jest --coverage"
+   }
 }

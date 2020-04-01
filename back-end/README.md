@@ -1,5 +1,4 @@
-# Awesome Project Build with TypeORM
-
+# User Story Back-end
 Steps to run this project:
 
 1. Run `npm i` command
