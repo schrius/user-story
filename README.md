@@ -38,6 +38,8 @@ npm test
 ```
 
 ### Project Structure
+
+```bash
 ├── README.md
 ├── back-end
 │   ├── README.md
@@ -130,3 +132,4 @@ npm test
     │           ├── StoryApproval.js
     │           └── StoryList.js
     └── yarn.lock
+```
