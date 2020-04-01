@@ -63,9 +63,10 @@ class StoryController{
     };
 
     static updateStoryStatus = async (req: Request, res: Response) => {
+        console.log(req.params)
         const id = req.params.id;
         const { status } = req.body;
-
+        console.log(req.body)
         const storyRepository = getRepository(Story);
         try {
             await storyRepository.update(id, { status: status});
@@ -73,6 +74,7 @@ class StoryController{
             res.status(404).send("update status failed");
             return;
         }
+        res.status(200).send()
     };
 };
 

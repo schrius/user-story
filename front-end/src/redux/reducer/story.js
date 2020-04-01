@@ -44,8 +44,8 @@ export default (state = {
                 loading: false
             }
         case REJECT_STORY:
-            let rejectIndex = state.storyList.findIndex(story => story.tableData.id === action.payload.tableData.id)
-            state.storyList[rejectIndex].status = "rejected"
+            //let rejectIndex = state.storyList.findIndex(story => story.tableData.id === action.payload.tableData.id)
+            //state.storyList[rejectIndex].status = "rejected"
             return {
                 ...state,
                 loading: false

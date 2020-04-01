@@ -9,7 +9,8 @@ class StoryApproval extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            openDialog: false
+            openDialog: false,
+            target: {}
         }
         this.handleDialog = this.handleDialog.bind(this);
         this.handleAccept = this.handleAccept.bind(this);

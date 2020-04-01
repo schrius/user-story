@@ -28,7 +28,7 @@ const mapDispatchToProps = dispatch => ({
     },
     acceptStory: (story) => {
         dispatch({type: SET_STORY_LOADING})
-        console.log(story)
+        story.status = "accepted";
         StoryAPI.Story.updateStoryStatus(story)
             .then(res => dispatch({type: ACCEPT_STORY, payload: story}))
             .catch(err => dispatch({type: UPDATE_STORY_ERROR, error: err}))
@@ -36,6 +36,7 @@ const mapDispatchToProps = dispatch => ({
     },
     rejectStory: (story) => {
         dispatch({type: SET_STORY_LOADING})
+        story.status = "rejected";
         StoryAPI.Story.updateStoryStatus(story)
         .then(res => dispatch({type: REJECT_STORY, payload: story}))
         .catch(err => dispatch({type: UPDATE_STORY_ERROR, error: err}))

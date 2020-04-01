@@ -37,7 +37,7 @@ class AuthController {
               { userId: user.id, username: user.username, roles: user.roles},
               config.jwtSecret,
               { expiresIn: "3h" }
-            );
+            )
             res.send(token);
             return;
         }    
