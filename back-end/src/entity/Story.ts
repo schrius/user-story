@@ -20,7 +20,7 @@ export class Story {
     complexity: string;
 
     @Column()
-    estimateHrs: number;
+    estimatedHrs: number;
 
     @Column("double")
     cost: number;

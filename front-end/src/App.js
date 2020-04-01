@@ -1,6 +1,6 @@
 import React from 'react';
 import {history} from './store';
-import Routes from './Route';
+import Routes from './route';
 import { Provider } from 'react-redux';
 import './App.css';
 import store from './store';

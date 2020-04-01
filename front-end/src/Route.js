@@ -12,29 +12,23 @@ import {
     StoryApproval as StoryApprovalView,
     NotFound as NotFoundView
 } from './views';
-import { makeStyles } from '@material-ui/core/styles';
+import { LoginRedux } from './redux/actions';
 
-const useStyles = makeStyles((theme) => ({
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
-    },
-}));
+const { mapStateToProps, mapDispatchToProps} = LoginRedux
 
-const mapStateToProps = state => ({ ...state })
-
-const Routes = (props) => {
-    const classes = useStyles();
-    const { login } = props
-    if (login.loading) {
-        return (
-            <Backdrop className={classes.backdrop} open={login.loading}>
-                <CircularProgress color="inherit" />
-            </Backdrop>
-        )
-    } else if (login.user || localStorage.getItem('user')) {
-        user = login.user || JSON.parse(localStorage.getItem('user'))
-        if(user.userRoles.includes('Admin')){
+class Routes extends React.Component{
+    componentDidMount() {
+        if( !this.props.user && localStorage.getItem('jwt'))
+            this.props.loadUser()
+    }
+    render() {
+        if(this.props.loading){
+            return (
+                <Backdrop open={this.props.loading}>
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            )
+        } else if(this.props.user && this.props.user.roles.includes("Admin")) {
             return (
                 <Switch>
                     <Route exact path="/login" render={() => <Redirect to="/story-approval" />} />
@@ -43,9 +37,8 @@ const Routes = (props) => {
                     <Route path="*" render={() => <Redirect to="/404" />} />
                 </Switch>
             )
-        } else {
+        } else if(this.props.user){
             return (
-                
                 <Switch>
                     <Route exact path="/login" render={() => <Redirect to="/story-list" />} />
                     <RouteWithLayout component={CreateStoryView} exact layout={Layout} path="/create-story" />
@@ -54,13 +47,44 @@ const Routes = (props) => {
                     <Route path="*" render={() => <Redirect to="/404" />} />
                 </Switch>
             )
+        } else {
+            return (
+                <Switch>
+                    <Route exact path="/login" component={LoginInView} />
+                    <Route path="*" render={() => <Redirect to="/login" />} />
+                </Switch>
+            )
         }
-    } else return (
-        <Switch>
-            <Route exact path="/login" component={LoginInView} />
-            <Route path="*" render={() => <Redirect to="/login" />} />
-        </Switch>
-    )
+    }
 }
 
-export default connect(mapStateToProps, null)(Routes);
+export default connect(mapStateToProps, mapDispatchToProps)(Routes);
+
+/*
+{
+    user = login.user
+    if(user.userRoles.includes('Admin')){
+        return (
+            <Switch>
+                <Route exact path="/login" render={() => <Redirect to="/story-approval" />} />
+                <RouteWithLayout layout={Layout} exact path="/story-approval" component={StoryApprovalView} />
+                <Route path="/404" component={NotFoundView} />
+                <Route path="*" render={() => <Redirect to="/404" />} />
+            </Switch>
+        )
+    } else {
+        return (
+            
+            <Switch>
+                <Route exact path="/login" render={() => <Redirect to="/story-list" />} />
+                <RouteWithLayout component={CreateStoryView} exact layout={Layout} path="/create-story" />
+                <RouteWithLayout layout={Layout} exact path="/story-list" component={StoryListView} />
+                <Route path="/404" component={NotFoundView} />
+                <Route path="*" render={() => <Redirect to="/404" />} />
+            </Switch>
+        )
+    }
+} else
+
+
+*/

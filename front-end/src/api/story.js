@@ -1,33 +1,45 @@
 import axios from 'axios';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASEURL
-/*
-const Auth = {
-    login: (email, password) => axios.post(
-        '/api/login',
-        {
-            auth: {
-                email,
-                password
-            }
-        }),
-    adminLogin: (email, password) => axios.post(
-        '/api/admin-login',
-        {
-            auth: {
-                email,
-                password
-            }
-        })
+
+var token = null
+const instance = axios.create();
+
+const requests = {
+    post: (url, req) => {
+        instance.defaults.headers.common['authorization'] = `Bearer ${token}`;
+        return instance.post(url,req)
+    },
+    get: (url) => {
+        instance.defaults.headers.common['authorization'] = `Bearer ${token}`;
+        return instance.get(url);
+    }
 }
 
+const Auth = {
+    login: (email, password) => {
+        const instance = axios.create()
+        return instance.post(
+            '/auth/login', {}, {auth: {
+                username: email,
+                password: password
+            }})
+    }
+}
 
 const Story = {
-    createStory: (story) => axios.post('/api/createStory',story),
-    getStory: () => axios.get('/api/getStories')
+    createStory: (story) => requests.post('/story/createStory',story),
+    getStory: () => requests.get('/story/get'),
+    listStory: () => requests.get('/story/'),
+    updateStoryStatus: (story) => {
+        const instance = axios.create()
+        instance.defaults.headers.common['authorization'] = `Bearer ${token}`;
+        return instance.patch(`/story/${story.id}`, story);
+    }
 }
-*/
 
+/*
+// Hard code
 const Story = {
     createStory: (story) => Promise.resolve(),
     getStory: (user) => {
@@ -83,9 +95,10 @@ const Auth = {
         id: 3
     })
 }
-
+*/
 
 export default {
     Auth,
-    Story
+    Story,
+    setToken: _token => { token = _token }
 };

@@ -2,9 +2,9 @@ import React from 'react';
 import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutlined';
 import './CreateStory.css'
 import { connect } from 'react-redux';
-import { CreateStoryRedux } from '../../redux/actions';
+import { StoryListRedux } from '../../redux/actions';
 
-const { mapStateToProps, mapDispatchToProps} = CreateStoryRedux;
+const { mapStateToProps, mapDispatchToProps} = StoryListRedux;
 
 class CreateStory extends React.Component {
     constructor(props) {
@@ -21,7 +21,6 @@ class CreateStory extends React.Component {
     handleCreateStory = event => {
         event.preventDefault();
         this.props.onCreateStory({
-            createBy: this.props.user.id,
             summary: this.state.summary,
             type: this.state.type || 'enhancement',
             complexity: this.state.complexity || 'Low',
@@ -29,7 +28,6 @@ class CreateStory extends React.Component {
             cost: this.state.cost,
             description: this.state.description
         })
-        this.props.history.push('/story-list')
     }
     render() {
         return (

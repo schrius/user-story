@@ -17,12 +17,8 @@ class StoryApproval extends React.Component {
     }
     componentDidMount() {
         if (!this.props.story || this.props.story.storyList.length === 0){
-            this.props.getStory(this.props.login.user)
+            this.props.listStory()
         }
-    }
-
-    componentWillUnmount() {
-        this.props.unloadStory()
     }
 
     handleDialog(rowData) {
@@ -79,9 +75,10 @@ class StoryApproval extends React.Component {
                     actions={[
                         rowData => ({
                             icon: 'done',
-                            tooltip: 'Approve',
+                            tooltip: 'Accept',
                             hidden: (rowData.status === 'accepted' || rowData.status === 'rejected') ? true : false,
                             onClick: () => {
+                                rowData.status = 'accepted'
                                 history.push('/story-approval')
                             }
                         }),
@@ -90,6 +87,7 @@ class StoryApproval extends React.Component {
                             tooltip: 'Reject',
                             hidden: (rowData.status === 'accepted' || rowData.status === 'rejected') ? true : false,
                             onClick: () => {
+                                rowData.status = 'rejected'
                                 history.push('/story-approval')
                             }
                         }),

@@ -5,8 +5,10 @@ import {
     GET_STORY_ERROR,
     UNLOAD_STORY,
     ACCEPT_STORY,
-    REJECT_STORY
+    REJECT_STORY,
+    LOGOUT
 } from '../../constants/actionTypes';
+import {history} from '../../store';
 
 export default (state = {
     loading: false,
@@ -14,6 +16,7 @@ export default (state = {
 }, action) => {
     switch (action.type) {
         case CREATE_STORY:
+            history.push('/story-list')
             return { 
                 ...state,
                 loading: false,
@@ -48,6 +51,12 @@ export default (state = {
                 loading: false
             }
         case UNLOAD_STORY:
+            return {
+                ...state,
+                loading: false,
+                storyList: []
+            }
+        case LOGOUT:
             return {
                 ...state,
                 loading: false,

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
 import config from "../config/config";
 
-export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
+export const checkJwt = (req: Request, res: Response, next: NextFunction) => {    
     if (req.headers["authorization"]) {
         const bearerToken = req.headers["authorization"].split(' ');
         if (bearerToken.length === 2) {

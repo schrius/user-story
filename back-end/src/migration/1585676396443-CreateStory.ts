@@ -14,7 +14,7 @@ export class CreateStory1585676396443 implements MigrationInterface {
             description: "des",
             type: "bugfix",
             complexity: "Low",
-            estimateHrs: 3,
+            estimatedHrs: 3,
             cost: 300,
             status: null,
             user: user1
@@ -24,23 +24,33 @@ export class CreateStory1585676396443 implements MigrationInterface {
             description: "des",
             type: "bugfix",
             complexity: "Low",
-            estimateHrs: 3,
+            estimatedHrs: 3,
             cost: 300,
             status: null,
             user: user1
         })
         let story3 = storyRepository.create({
-            summary: "2 story createby 2",
+            summary: "3 story createby 2",
             description: "des",
             type: "bugfix",
             complexity: "Low",
-            estimateHrs: 3,
+            estimatedHrs: 3,
             cost: 300,
-            status: null,
+            status: "rejected",
+            user: user2
+        })
+        let story4 = storyRepository.create({
+            summary: "4 story createby 2",
+            description: "des",
+            type: "bugfix",
+            complexity: "Low",
+            estimatedHrs: 3,
+            cost: 300,
+            status: "accepted",
             user: user2
         })
         const entityManager = getManager();
-       await entityManager.save([story1, story2, story3])
+       await entityManager.save([story1, story2, story3,story4])
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

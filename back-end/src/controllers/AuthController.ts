@@ -24,11 +24,11 @@ class AuthController {
     
             try {
               user = await userRepository.findOneOrFail({ where: { username } });
-            } catch (error) {
-              res.status(401).send();
-            }
-        
             if (!user.validatePassword(password)) {
+                res.status(401).send();
+                return;
+              }
+            } catch (error) {
               res.status(401).send();
               return;
             }

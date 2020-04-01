@@ -26,29 +26,31 @@ class StoryController{
     }
 
     static newStory = async (req: Request, res: Response) => {
-        let { summary, type, complexity, cost, estimateHrs, description} = req.body;
+        let { summary, type, complexity, cost, estimatedHrs, description} = req.body;
         const id = res.locals.jwtPayload.userId;
         const manager = getManager();
+        const storyRepository = getRepository(Story);
         try {
             const user = await manager.findOneOrFail(User, id)
-            const story = manager.create(Story, {
+            console.log(user)
+            const story = storyRepository.create({
                 summary: summary,
                 type: type,
                 complexity: complexity,
-                cost: cost,
-                estimateHrs: estimateHrs,
+                cost: parseInt(cost),
+                estimatedHrs: parseInt(estimatedHrs),
                 description: description,
                 status: null,
                 user: user
             })
-
+            console.log(story)
             const errors = await validate(story);
             if (errors.length > 0) {
                 res.status(400).send(errors);
                 return;
             }
             try {
-                await manager.insert(Story,story);
+                await manager.save(Story,story);
             } catch (e) {
                 res.status(409).send("story already exist")
                 return;

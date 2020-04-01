@@ -10,11 +10,6 @@ class StoryList extends React.Component {
             this.props.getStory(this.props.login.user)
         }
     }
-
-    componentWillUnmount() {
-        this.props.unloadStory()
-    }
-
     render() {
         return (
             <div className="container">
