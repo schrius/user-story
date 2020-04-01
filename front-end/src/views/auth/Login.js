@@ -1,11 +1,11 @@
 import React from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import { connect } from 'react-redux';
 import './Login.css';
 import { LoginRedux } from '../../redux/actions'
 
 const { mapStateToProps, mapDispatchToProps} = LoginRedux
+
+// login view
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -14,9 +14,9 @@ class Login extends React.Component {
             password: '',
             admin: false,
         }
-        this.Login = (email, password, admin) => event => {
+        this.Login = (email, password) => event => {
             event.preventDefault();
-            this.props.onLogin(email, password, admin);
+            this.props.onLogin(email, password);
         }
         this.handleChange = this.handleChange.bind(this)
         this.changeLogin = this.changeLogin.bind(this)
@@ -67,19 +67,6 @@ class Login extends React.Component {
                             value={this.state.password}
                             onChange={this.handleChange}
                             required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={this.state.admin}
-                                    onChange={this.changeLogin}
-                                    name="admin"
-                                    color="primary"
-                                />
-                            }
-                            label="Administrator"
                         />
                     </div>
                     <button type="submit" className="btn btn-primary btn-block" disabled={this.props.loading}>Login</button>

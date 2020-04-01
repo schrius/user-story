@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { StoryListRedux } from '../../redux/actions';
 
 const { mapStateToProps, mapDispatchToProps} = StoryListRedux;
+
+// user story list 
 class StoryList extends React.Component {
     componentDidMount() {
         if (!this.props.story || this.props.story.storyList.length === 0){
@@ -21,7 +23,8 @@ class StoryList extends React.Component {
                         { title: 'Type', field: 'type' },
                         { title: 'Complexity', field: 'complexity' },
                         { title: 'Estimate Time', field: 'estimatedHrs' },
-                        { title: 'Cost', field: 'cost', type: 'numeric' },
+                        { title: 'Cost', field: 'cost' },
+                        { title: 'Status', field: 'status'}
                     ]}
                     data={ this.props.story.storyList || []}
                     detailPanel={
@@ -46,6 +49,7 @@ class StoryList extends React.Component {
                             }
                         }
                     ]}
+                    onRowClick={(event, rowData, togglePanel) => togglePanel()}
                 />
             </div>
         )

@@ -5,7 +5,8 @@ import { validate } from "class-validator";
 import { User } from "../entity/User";
 import config from "../config/config";
 
-
+// Authorization controller
+// handle all login request and return a jwt token
 class AuthController {
   static login = async (req: Request, res: Response) => {
     let basicAuth = req.headers['authorization'];

@@ -6,6 +6,7 @@ import { StoryListRedux } from '../../redux/actions';
 
 const { mapStateToProps, mapDispatchToProps} = StoryListRedux;
 
+// user story creation view
 class CreateStory extends React.Component {
     constructor(props) {
         super(props);

@@ -4,57 +4,56 @@ import { validate } from "class-validator";
 import { User } from "../entity/User";
 
 class UserController{
-
-static listAll = async (req: Request, res: Response) => {
-  //Get users from database
-  const userRepository = getRepository(User);
-  const users = await userRepository.find({
-    select: ["id", "username", "firstName", "lastName", "roles"] 
-  });
-
-  res.send(users);
-};
-
-static getOneById = async (req: Request, res: Response) => {
-  const id: number = <unknown>req.params.id as number;
-  const userRepository = getRepository(User);
-  try {
-    const user = await userRepository.findOneOrFail(id, {
-      select: ["username", "lastName"] 
+    static listAll = async (req: Request, res: Response) => {
+    //Get users from database
+    const userRepository = getRepository(User);
+    const users = await userRepository.find({
+        select: ["id", "username", "firstName", "lastName", "roles"] 
     });
-    res.send(user)
-  } catch (error) {
-    res.status(404).send("User not found");
-  }
-};
 
-static newUser = async (req: Request, res: Response) => {
-  let { username, password, role, lastName, firstName } = req.body;
-  let user = new User();
-  user.username = username;
-  user.password = password;
-  user.firstName = firstName;
-  user.lastName = lastName;
-  user.roles = [role];
+    res.send(users);
+    };
 
-  const errors = await validate(user);
-  if (errors.length > 0) {
-    res.status(400).send(errors);
-    return;
-  }
+    static getOneById = async (req: Request, res: Response) => {
+    const id: number = <unknown>req.params.id as number;
+    const userRepository = getRepository(User);
+    try {
+        const user = await userRepository.findOneOrFail(id, {
+        select: ["username", "lastName"] 
+        });
+        res.send(user)
+    } catch (error) {
+        res.status(404).send("User not found");
+    }
+    };
 
-  user.hashPassword();
+    static newUser = async (req: Request, res: Response) => {
+    let { username, password, role, lastName, firstName } = req.body;
+    let user = new User();
+    user.username = username;
+    user.password = password;
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.roles = [role];
 
-  const userRepository = getRepository(User);
-  try {
-    await userRepository.insert(user);
-  } catch (e) {
-    res.status(409).send("username already in use");
-    return;
-  }
+    const errors = await validate(user);
+    if (errors.length > 0) {
+        res.status(400).send(errors);
+        return;
+    }
 
-  res.status(201).send("User created");
-};
+    user.hashPassword();
+
+    const userRepository = getRepository(User);
+    try {
+        await userRepository.insert(user);
+    } catch (e) {
+        res.status(409).send("username already in use");
+        return;
+    }
+
+    res.status(201).send("User created");
+    };
 
 };
 

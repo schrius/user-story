@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { getRepository } from "typeorm";
 import { User, UserRole } from "../entity/User";
 
+
+// check token privallege 
 export const checkRole = (reqRole: UserRole) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         // Get user ID

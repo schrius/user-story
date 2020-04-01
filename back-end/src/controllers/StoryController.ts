@@ -4,6 +4,8 @@ import { validate } from "class-validator";
 import { Story } from '../entity/Story'
 import { User } from '../entity/User';
 
+// Story Controller
+// handle new story creation, update story status and list stories
 class StoryController{
     static listAll = async (req: Request, res: Response) => {
         const storyRepository = getRepository(Story);

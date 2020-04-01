@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { StoryListRedux } from '../../redux/actions';
 
 const { mapStateToProps, mapDispatchToProps } = StoryListRedux
+
+// Admin story approval view
 class StoryApproval extends React.Component {
     constructor(props) {
         super(props);
@@ -42,7 +44,6 @@ class StoryApproval extends React.Component {
     }
 
     render() {
-        const {history} = this.props;
         return (
             <div className="container">
                 <MaterialTable
@@ -53,8 +54,8 @@ class StoryApproval extends React.Component {
                         { title: 'Type', field: 'type' },
                         { title: 'Complexity', field: 'complexity' },
                         { title: 'Estimate Time', field: 'estimatedHrs' },
-                        { title: 'Cost', field: 'cost', type: 'numeric' },
-                        { title: 'Status', field: 'status', type: 'numeric' },
+                        { title: 'Cost', field: 'cost' },
+                        { title: 'Status', field: 'status' },
                     ]}
                     data={this.props.story.storyList || []}
                     detailPanel={
@@ -79,8 +80,7 @@ class StoryApproval extends React.Component {
                             tooltip: 'Accept',
                             hidden: (rowData.status === 'accepted' || rowData.status === 'rejected') ? true : false,
                             onClick: () => {
-                                rowData.status = 'accepted'
-                                history.push('/story-approval')
+                                this.props.acceptStory(rowData)
                             }
                         }),
                         rowData => ({
@@ -89,7 +89,7 @@ class StoryApproval extends React.Component {
                             hidden: (rowData.status === 'accepted' || rowData.status === 'rejected') ? true : false,
                             onClick: () => {
                                 rowData.status = 'rejected'
-                                history.push('/story-approval')
+                                this.props.rejectStory(rowData)
                             }
                         }),
 
@@ -107,7 +107,6 @@ class StoryApproval extends React.Component {
                         handleAccept={this.handleAccept} 
                     /> : null }
             </div>
-
         )
     }
 

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
 import config from "../config/config";
 
+// check jwt token
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {    
     if (req.headers["authorization"]) {
         const bearerToken = req.headers["authorization"].split(' ');
