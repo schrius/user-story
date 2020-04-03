@@ -6,6 +6,11 @@ import { UserRole } from "../entity/User"
 
 const router = Router();
 
+
+// Add cookieParser 
+// checkJwt middleware relies on cookies being available
+// app.use(cookieParser());
+
 router.all("*", checkJwt)
 
 // get all stories with status

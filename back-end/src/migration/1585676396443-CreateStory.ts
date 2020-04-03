@@ -54,6 +54,15 @@ export class CreateStory1585676396443 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        let story = await queryRunner.getTable("Story");
+
+        let migration = await queryRunner.getTable("Migration");
+        if(story)
+            await queryRunner.dropTable(story!)
+
+        if(migration)
+            await queryRunner.dropTable(migration!)
+        await queryRunner.release();
     }
 
 }

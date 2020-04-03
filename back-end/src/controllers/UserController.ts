@@ -29,12 +29,14 @@ class UserController{
 
     static newUser = async (req: Request, res: Response) => {
     let { username, password, role, lastName, firstName } = req.body;
-    let user = new User();
-    user.username = username;
-    user.password = password;
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.roles = [role];
+    const userRepository = getRepository(User);
+
+    let user = userRepository.create({
+        username: username,
+        password: password,
+        lastName: lastName,
+        roles: [role]
+    })
 
     const errors = await validate(user);
     if (errors.length > 0) {
@@ -43,8 +45,6 @@ class UserController{
     }
 
     user.hashPassword();
-
-    const userRepository = getRepository(User);
     try {
         await userRepository.insert(user);
     } catch (e) {

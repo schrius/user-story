@@ -27,6 +27,8 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
                     expiresIn: "3h"
                 });
 
+                // set token to cookies
+                //res.cookie("access_token", newToken, { maxAge: 7200});
                 res.setHeader("token", newToken);
                 next();
                 return;
@@ -34,6 +36,6 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
         }
     }
 
-    res.status(401).send();
+    res.status(400).send();
     return;
 };

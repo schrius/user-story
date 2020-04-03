@@ -6,6 +6,9 @@ Users is able to submit a story(ticket) and view the stories from the front-end 
 JWT is stored in local storage. JWT will be removed if logged out.
 Admin have a seperate view that can review all stories(ticket) and decide to accept it or reject the request.
 
+Note:
+For simplicity, jwt was return in response body, not cookie.
+
 ## Back End
 Back end is resposible for authorization and authenicaiton using JWT.
 Once user is authorized a JWT is returned.
@@ -28,6 +31,10 @@ ormconfig.json contain test environment configuration
 ```bash
 npm run migration:run
 ```
+To clean up the database
+```bash
+npm run migration:revert
+```
 5. To clear the test data run:
 ```bash
 npm run migration:revert
@@ -36,6 +43,7 @@ npm run migration:revert
 ```bash
 npm test
 ```
+No integration test cases was included.
 
 ### Project Structure
 

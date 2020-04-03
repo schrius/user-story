@@ -21,5 +21,9 @@ export class CreateAdminUser1585607730140 implements MigrationInterface {
     await userRepository.save([user, adminUser]);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<any> {}
+  public async down(queryRunner: QueryRunner): Promise<any> {
+    let user = await queryRunner.getTable("User");
+    if(user)
+        await queryRunner.dropTable(user!)
+  }
 }

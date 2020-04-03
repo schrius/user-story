@@ -34,7 +34,6 @@ class StoryController{
         const storyRepository = getRepository(Story);
         try {
             const user = await manager.findOneOrFail(User, id)
-            console.log(user)
             const story = storyRepository.create({
                 summary: summary,
                 type: type,
@@ -45,7 +44,6 @@ class StoryController{
                 status: null,
                 user: user
             })
-            console.log(story)
             const errors = await validate(story);
             if (errors.length > 0) {
                 res.status(400).send(errors);
@@ -65,10 +63,10 @@ class StoryController{
     };
 
     static updateStoryStatus = async (req: Request, res: Response) => {
-        console.log(req.params)
+
         const id = req.params.id;
         const { status } = req.body;
-        console.log(req.body)
+        
         const storyRepository = getRepository(Story);
         try {
             await storyRepository.update(id, { status: status});
